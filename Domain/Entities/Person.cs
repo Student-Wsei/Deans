@@ -1,9 +1,9 @@
-﻿namespace Domain.Entities;
+namespace Domain.Entities;
 
-public abstract class Person: BaseEntity
+public abstract class Person: EntityBase
 {
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public string NationalId { get; set; }
-    public string Email { get; set; }
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
+    public string NationalId { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
 }

@@ -1,5 +1,6 @@
-﻿using App.Dto;
 using Domain.Enums;
+
+namespace AppCore.Dto;
 
 public sealed record StudentSummaryDto : PersonDto
 {

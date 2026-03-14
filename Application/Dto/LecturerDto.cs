@@ -1,4 +1,4 @@
-﻿namespace App.Dto;
+namespace AppCore.Dto;
 
 public sealed record LecturerSummaryDto: PersonDto
 {

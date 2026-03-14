@@ -41,7 +41,7 @@ public static class GradeExtensions
         return Enum.GetValues<GradeValue>().Select(g => g.Value().ToString("N1")).ToList();
     }
 
-    public static string PolishName(GradeValue gradeValue)
+    public static string PolishName(this GradeValue gradeValue)
     {
         return _polishGradeTranslations[gradeValue];
     }

@@ -2,7 +2,7 @@
 
 namespace Domain.Entities;
 
-public class DegreeProgram: BaseEntity
+public class DegreeProgram: EntityBase
 {
     public string Code { get; set; }
     public string Name { get; set; }

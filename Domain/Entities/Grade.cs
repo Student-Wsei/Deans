@@ -2,7 +2,7 @@
 
 namespace Domain.Entities;
 
-public class Grade: BaseEntity
+public class Grade: EntityBase
 {
     public Student Student { get; set; }
     public Course Course { get; set; }

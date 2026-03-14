@@ -1,4 +1,4 @@
-﻿namespace App.Dto;
+namespace AppCore.Dto;
 
 public abstract record PersonDto
 {
