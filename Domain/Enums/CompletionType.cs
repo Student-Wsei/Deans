@@ -1,0 +1,8 @@
+﻿namespace Domain.Enums;
+
+public enum CompletionType
+{
+    Exam,
+    CreditWithGrade,
+    CreditWithoutGrade
+}
