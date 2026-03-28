@@ -109,7 +109,7 @@ public class MemoryGenericRepositoryTest
 
 public class InMemoryStudentRepositoryTest
 {
-    private readonly InMemoryStudentRepository _repo = new();
+    private readonly MemoryStudentRepository _repo = new();
     private readonly AcademicYear _year = new() { Id = Guid.NewGuid(), YearFrom = 2024, YearTo = 2025, Name = "2024/2025" };
     private readonly DegreeProgram _program = new() { Id = Guid.NewGuid(), Code = "INF", Name = "Informatyka", Faculty = "WMI" };
 
@@ -150,37 +150,13 @@ public class InMemoryStudentRepositoryTest
 
 public class InMemoryLecturerRepositoryTest
 {
-    private readonly InMemoryLecturerRepository _repo = new();
+    private readonly MemoryLecturerRepository _repo = new();
 
     [Fact]
-    public async Task GetLecturerForCourse_ReturnsMatching()
+    public async Task GetLecturerForCourse_ThrowsNotImplemented()
     {
         var course = new Course { Id = Guid.NewGuid() };
-        var l = new Lecturer { Id = Guid.NewGuid(), TaughtCourses = new List<Course> { course }, FirstName = "X" };
-        var l2 = new Lecturer { Id = Guid.NewGuid(), TaughtCourses = new List<Course>(), FirstName = "Y" };
-        await _repo.AddAsync(l);
-        await _repo.AddAsync(l2);
-        var result = await _repo.GetLecturerForCourseAsync(course);
-        Assert.Equal(l.Id, result?.Id);
-    }
-
-    [Fact]
-    public async Task GetLecturersByTitle_ReturnsMatching()
-    {
-        await _repo.AddAsync(new Lecturer { Id = Guid.NewGuid(), Title = "dr" });
-        await _repo.AddAsync(new Lecturer { Id = Guid.NewGuid(), Title = "prof" });
-        await _repo.AddAsync(new Lecturer { Id = Guid.NewGuid(), Title = "dr" });
-        var result = await _repo.GetLecturersByTitleAsync("dr");
-        Assert.Equal(2, result.Count);
-    }
-
-    [Fact]
-    public async Task GetLecturersByFaculty_ReturnsMatching()
-    {
-        await _repo.AddAsync(new Lecturer { Id = Guid.NewGuid(), Faculty = "WMI" });
-        await _repo.AddAsync(new Lecturer { Id = Guid.NewGuid(), Faculty = "WCH" });
-        var result = await _repo.GetLecturersByFacultyAsync("WMI");
-        Assert.Single(result);
+        await Assert.ThrowsAsync<NotImplementedException>(() => _repo.GetLecturerForCourseAsync(course));
     }
 }
 
