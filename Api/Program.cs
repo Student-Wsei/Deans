@@ -1,6 +1,8 @@
+using AppCore.Module;
 using Application.Services;
 using Domain;
 using Domain.Entities;
+using FluentValidation.AspNetCore;
 using Infrastructure.Repositories;
 using Api.Controllers;
 
@@ -13,6 +15,9 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Services.AddControllers();
+        builder.Services.AddFluentValidationAutoValidation();
+
+        builder.Services.AddStudentsModule(builder.Configuration);
 
         builder.Services.AddSingleton<IStudentRepository, MemoryStudentRepository>();
         builder.Services.AddSingleton<ILecturerRepository, MemoryLecturerRepository>();

@@ -18,13 +18,13 @@ public class MemoryStudentService(IUniversityUnitOfWork unitOfWork) : IStudentSe
         return new PagedResult<StudentSummaryDto>(items, paged.TotalCount, paged.Page, paged.PageSize);
     }
 
-    public async Task<StudentDetailDto?> FindStudentById(Guid id)
+    public async Task<StudentSummaryDto?> GetById(Guid id)
     {
         var student = await unitOfWork.Students.FindByIdAsync(id);
-        return student == null ? null : StudentDetailDto.FromEntity(student);
+        return student == null ? null : StudentSummaryDto.FromEntity(student);
     }
 
-    public async Task<StudentDetailDto> CreateStudent(StudentCreateDto dto)
+    public async Task<Student> AddStudent(StudentCreateDto dto)
     {
         DegreeProgram? program = null;
         if (!string.IsNullOrWhiteSpace(dto.ProgramCode))
@@ -42,13 +42,13 @@ public class MemoryStudentService(IUniversityUnitOfWork unitOfWork) : IStudentSe
                 Name = $"{dto.EnrollmentYearFrom}/{dto.EnrollmentYearFrom + 1}"
             };
         }
-        var student = StudentCreateDto.ToEntity(dto, program, year);
-        await unitOfWork.Students.AddAsync(student);
+        var entity = StudentCreateDto.ToEntity(dto, program, year);
+        entity = await unitOfWork.Students.AddAsync(entity);
         await unitOfWork.SaveChangesAsync();
-        return StudentDetailDto.FromEntity(student);
+        return entity;
     }
 
-    public async Task<StudentDetailDto?> UpdateStudent(Guid id, StudentUpdateDto dto)
+    public async Task<StudentSummaryDto?> UpdateStudent(Guid id, StudentUpdateDto dto)
     {
         var student = await unitOfWork.Students.FindByIdAsync(id);
         if (student == null) return null;
@@ -60,16 +60,16 @@ public class MemoryStudentService(IUniversityUnitOfWork unitOfWork) : IStudentSe
         dto.ApplyTo(student, program);
         await unitOfWork.Students.UpdateAsync(student);
         await unitOfWork.SaveChangesAsync();
-        return StudentDetailDto.FromEntity(student);
+        return StudentSummaryDto.FromEntity(student);
     }
 
-    public async Task<StudentDetailDto?> UpdateStudentStatus(Guid id, StudentStatus status)
+    public async Task<StudentSummaryDto?> UpdateStudentStatus(Guid id, StudentStatus status)
     {
         var student = await unitOfWork.Students.FindByIdAsync(id);
         if (student == null) return null;
         student.Status = status;
         await unitOfWork.Students.UpdateAsync(student);
         await unitOfWork.SaveChangesAsync();
-        return StudentDetailDto.FromEntity(student);
+        return StudentSummaryDto.FromEntity(student);
     }
 }
