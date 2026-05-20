@@ -1,6 +1,7 @@
 using Domain;
 using Domain.Entities;
 using Domain.Enums;
+using Domain.ValueObjects;
 using Infrastructure.Repositories;
 using Xunit;
 
@@ -19,7 +20,7 @@ public class MemoryGenericRepositoryTest
             FirstName = "Adam",
             LastName = "Kowalski",
             NationalId = "1234567890",
-            Email = "adam@example.com",
+            Email = new Domain.ValueObjects.EmailAddress("adam@example.com"),
             YearOfStudy = 1,
             Status = StudentStatus.Active
         };
@@ -184,5 +185,88 @@ public class GradeExtensionsTest
     public void PolishName_ReturnsPolishName(GradeValue input, string expected)
     {
         Assert.Equal(expected, input.PolishName());
+    }
+}
+
+public class EmailAddressTest
+{
+    [Theory]
+    [InlineData("adam@wsei.edu.pl", "adam", "wsei.edu.pl")]
+    [InlineData("Ewa.Kowalska@GMAIL.com", "Ewa.Kowalska", "gmail.com")]
+    public void Constructor_ValidEmail_StoresUserAndDomain(string input, string expectedUser, string expectedDomain)
+    {
+        var email = new EmailAddress(input);
+        Assert.Equal(expectedUser, email.User);
+        Assert.Equal(expectedDomain, email.Domain);
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("not-an-email")]
+    [InlineData("missing@")]
+    [InlineData("@missing.com")]
+    public void Constructor_InvalidEmail_Throws(string input)
+    {
+        Assert.Throws<ArgumentException>(() => new EmailAddress(input));
+    }
+
+    [Fact]
+    public void TryParse_InvalidReturnsFalse()
+    {
+        Assert.False(EmailAddress.TryParse("not-an-email", out _));
+    }
+
+    [Fact]
+    public void TryParse_ValidReturnsTrue()
+    {
+        Assert.True(EmailAddress.TryParse("a@b.com", out var email));
+        Assert.NotNull(email);
+    }
+
+    [Fact]
+    public void ImplicitStringConversion_Works()
+    {
+        var email = new EmailAddress("Test@Example.com");
+        string s = email;
+        Assert.Equal("Test@example.com", s);
+    }
+}
+
+public class MemoryDegreeProgramServiceTest
+{
+    private readonly InMemoryDegreeProgramRepository _programRepo = new();
+    private readonly MemoryStudentRepository _studentRepo = new();
+
+    private MemoryDegreeProgramService BuildService()
+    {
+        var uow = new MemoryUniversityUnitOfWork(_studentRepo, new MemoryLecturerRepository(),
+            new InMemoryGradeRepository(), new InMemoryCourseRepository(), _programRepo);
+        return new MemoryDegreeProgramService(uow);
+    }
+
+    [Fact]
+    public async Task AddAsync_CreatesProgram()
+    {
+        var service = BuildService();
+        var dto = new AppCore.Dto.DegreeProgramCreateDto
+        {
+            Code = "INF",
+            Name = "Informatyka",
+            Faculty = "WMI",
+            DegreeType = DegreeType.Bachelor,
+            DurationYears = 3,
+            MinEctsForDiploma = 180
+        };
+        var result = await service.AddAsync(dto);
+        Assert.Equal("INF", result.Code);
+        Assert.NotEqual(Guid.Empty, result.Id);
+    }
+
+    [Fact]
+    public async Task GetReportAsync_UnknownId_ReturnsNull()
+    {
+        var service = BuildService();
+        var report = await service.GetReportAsync(Guid.NewGuid());
+        Assert.Null(report);
     }
 }

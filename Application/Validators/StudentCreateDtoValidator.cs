@@ -1,4 +1,5 @@
 using AppCore.Dto;
+using Domain.ValueObjects;
 using FluentValidation;
 
 namespace AppCore.Validators;
@@ -23,8 +24,9 @@ public class StudentCreateDtoValidator : AbstractValidator<StudentCreateDto>
 
         RuleFor(x => x.Email)
             .NotEmpty().WithMessage("Email jest wymagany.")
-            .EmailAddress().WithMessage("Nieprawidłowy format adresu email.")
-            .MaximumLength(200);
+            .MaximumLength(200)
+            .Must(e => EmailAddress.TryParse(e, out _))
+            .WithMessage("Nieprawidłowy format adresu email.");
 
         RuleFor(x => x.YearOfStudy)
             .Must(year => year >= 1 && year <= 5)

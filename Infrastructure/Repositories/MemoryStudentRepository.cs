@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Domain;
 using Domain.Entities;
 using Domain.Enums;
+using Domain.ValueObjects;
 
 namespace Infrastructure.Repositories;
 
@@ -17,7 +18,7 @@ public class MemoryStudentRepository : MemoryGenericRepository<Person>, IStudent
             FirstName = "Adam",
             LastName = "Nowak",
             NationalId = "0123456789",
-            Email = "adam.nowak@example.com",
+            Email = new EmailAddress("adam.nowak@example.com"),
             StudentId = "S1001",
             YearOfStudy = 1,
             Status = StudentStatus.Active
@@ -27,7 +28,7 @@ public class MemoryStudentRepository : MemoryGenericRepository<Person>, IStudent
             FirstName = "Ewa",
             LastName = "Kowalska",
             NationalId = "9876543210",
-            Email = "ewa.kowalska@example.com",
+            Email = new EmailAddress("ewa.kowalska@example.com"),
             StudentId = "S1002",
             YearOfStudy = 2,
             Status = StudentStatus.Active

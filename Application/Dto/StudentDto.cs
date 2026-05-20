@@ -1,5 +1,6 @@
 using Domain.Entities;
 using Domain.Enums;
+using Domain.ValueObjects;
 
 namespace AppCore.Dto;
 
@@ -71,7 +72,7 @@ public sealed record StudentCreateDto : PersonCreateDto
             FirstName = dto.FirstName,
             LastName = dto.LastName,
             NationalId = dto.NationalId,
-            Email = dto.Email,
+            Email = EmailAddress.Parse(dto.Email),
             StudentId = dto.StudentId,
             YearOfStudy = dto.YearOfStudy,
             DegreeProgram = program,
@@ -91,7 +92,7 @@ public sealed record StudentUpdateDto : PersonDto
     {
         student.FirstName = FirstName;
         student.LastName = LastName;
-        student.Email = Email;
+        student.Email = EmailAddress.Parse(Email);
         student.YearOfStudy = YearOfStudy;
         student.Status = Status;
         if (program != null)

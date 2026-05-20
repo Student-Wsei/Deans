@@ -27,6 +27,7 @@ public class Program
 
         builder.Services.AddSingleton<IUniversityUnitOfWork, MemoryUniversityUnitOfWork>();
         builder.Services.AddSingleton<IStudentService, MemoryStudentService>();
+        builder.Services.AddSingleton<IDegreeProgramService, MemoryDegreeProgramService>();
 
         builder.Services.AddExceptionHandler<ProblemDetailsExceptionHandler>();
         builder.Services.AddProblemDetails();
