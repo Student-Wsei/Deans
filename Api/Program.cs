@@ -28,6 +28,9 @@ public class Program
         builder.Services.AddSingleton<IUniversityUnitOfWork, MemoryUniversityUnitOfWork>();
         builder.Services.AddSingleton<IStudentService, MemoryStudentService>();
 
+        builder.Services.AddExceptionHandler<ProblemDetailsExceptionHandler>();
+        builder.Services.AddProblemDetails();
+
         builder.Services.AddOpenApi();
 
         var app = builder.Build();
@@ -37,6 +40,7 @@ public class Program
             app.MapOpenApi();
         }
 
+        app.UseExceptionHandler();
         app.UseHttpsRedirection();
         app.UseAuthorization();
         app.MapControllers();

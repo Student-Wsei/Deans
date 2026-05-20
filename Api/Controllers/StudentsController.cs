@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using AppCore.Dto;
 using Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -52,6 +53,46 @@ public class StudentsController(IStudentService service) : ControllerBase
     public async Task<IActionResult> UpdateStudentStatus(Guid id, [FromQuery] Domain.Enums.StudentStatus status)
     {
         var updated = await service.UpdateStudentStatus(id, status);
+        if (updated == null) return NotFound();
+        return Ok(updated);
+    }
+
+    [HttpPost("{studentId:guid}/grades")]
+    [ProducesResponseType(typeof(GradeDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> AddGrade(
+        [FromRoute] Guid studentId,
+        [FromBody] GradeCreateDto dto)
+    {
+        var note = await service.AddGrade(studentId, dto);
+        return CreatedAtAction(
+            nameof(GetGrades),
+            new { studentId },
+            note);
+    }
+
+    [HttpGet("{studentId:guid}/grades")]
+    [ProducesResponseType(typeof(IEnumerable<GradeDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetGrades([FromRoute] Guid studentId)
+    {
+        var student = await service.GetById(studentId);
+        if (student == null) return NotFound();
+        var grades = await service.GetGrades(studentId);
+        return Ok(grades);
+    }
+
+    [HttpPut("{studentId:guid}/grades/{gradeId:guid}")]
+    [ProducesResponseType(typeof(GradeDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateGrade(
+        [FromRoute] Guid studentId,
+        [FromRoute] Guid gradeId,
+        [FromBody] GradeUpdateDto dto)
+    {
+        var updated = await service.UpdateGrade(studentId, gradeId, dto);
         if (updated == null) return NotFound();
         return Ok(updated);
     }

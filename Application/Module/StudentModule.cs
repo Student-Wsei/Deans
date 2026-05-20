@@ -17,6 +17,8 @@ public static class StudentModule
         services.AddValidatorsFromAssemblyContaining<StudentCreateDtoValidator>();
         services.AddScoped<IValidator<StudentCreateDto>, StudentCreateDtoValidator>();
         services.AddScoped<IValidator<StudentUpdateDto>, StudentUpdateDtoValidator>();
+        services.AddScoped<IValidator<GradeCreateDto>, GradeCreateDtoValidator>();
+        services.AddScoped<IValidator<GradeUpdateDto>, GradeUpdateDtoValidator>();
         return services;
     }
 }

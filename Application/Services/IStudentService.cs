@@ -14,4 +14,7 @@ public interface IStudentService
     Task<Student> AddStudent(StudentCreateDto dto);
     Task<StudentSummaryDto?> UpdateStudent(Guid id, StudentUpdateDto dto);
     Task<StudentSummaryDto?> UpdateStudentStatus(Guid id, Domain.Enums.StudentStatus status);
+    Task<GradeDto> AddGrade(Guid studentId, GradeCreateDto dto);
+    Task<IEnumerable<GradeDto>> GetGrades(Guid studentId);
+    Task<GradeDto?> UpdateGrade(Guid studentId, Guid gradeId, GradeUpdateDto dto);
 }
