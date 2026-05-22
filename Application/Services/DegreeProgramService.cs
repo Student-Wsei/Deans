@@ -2,13 +2,12 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using AppCore.Dto;
-using Application.Services;
 using Domain;
 using Domain.Enums;
 
-namespace Infrastructure.Repositories;
+namespace Application.Services;
 
-public class MemoryDegreeProgramService(IUniversityUnitOfWork unitOfWork) : IDegreeProgramService
+public class DegreeProgramService(IUniversityUnitOfWork unitOfWork) : IDegreeProgramService
 {
     public async Task<DegreeProgramDto> AddAsync(DegreeProgramCreateDto dto)
     {

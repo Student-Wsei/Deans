@@ -1,10 +1,6 @@
 using AppCore.Module;
-using Application.Services;
-using Domain;
-using Domain.Entities;
 using FluentValidation.AspNetCore;
-using Infrastructure.Repositories;
-using Api.Controllers;
+using Infrastructure.EntityFramework;
 
 namespace Api;
 
@@ -18,16 +14,8 @@ public class Program
         builder.Services.AddFluentValidationAutoValidation();
 
         builder.Services.AddStudentsModule(builder.Configuration);
-
-        builder.Services.AddSingleton<IStudentRepository, MemoryStudentRepository>();
-        builder.Services.AddSingleton<ILecturerRepository, MemoryLecturerRepository>();
-        builder.Services.AddSingleton<IGradeRepository, InMemoryGradeRepository>();
-        builder.Services.AddSingleton<ICourseRepository, InMemoryCourseRepository>();
-        builder.Services.AddSingleton<IDegreeProgramRepository, InMemoryDegreeProgramRepository>();
-
-        builder.Services.AddSingleton<IUniversityUnitOfWork, MemoryUniversityUnitOfWork>();
-        builder.Services.AddSingleton<IStudentService, MemoryStudentService>();
-        builder.Services.AddSingleton<IDegreeProgramService, MemoryDegreeProgramService>();
+        builder.Services.AddUniversityOfficeEfModule(builder.Configuration);
+        builder.Services.AddUniversityOfficeMemoryModule();
 
         builder.Services.AddExceptionHandler<ProblemDetailsExceptionHandler>();
         builder.Services.AddProblemDetails();

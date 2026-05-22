@@ -3,14 +3,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using AppCore.Dto;
 using AppCore.Exceptions;
-using Application.Services;
 using Domain;
 using Domain.Entities;
 using Domain.Enums;
 
-namespace Infrastructure.Repositories;
+namespace Application.Services;
 
-public class MemoryStudentService(IUniversityUnitOfWork unitOfWork) : IStudentService
+public class StudentService(IUniversityUnitOfWork unitOfWork) : IStudentService
 {
     public async Task<PagedResult<StudentSummaryDto>> FindAllStudentsPaged(int page, int size)
     {

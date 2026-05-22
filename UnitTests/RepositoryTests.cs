@@ -1,3 +1,4 @@
+using Application.Services;
 using Domain;
 using Domain.Entities;
 using Domain.Enums;
@@ -237,11 +238,11 @@ public class MemoryDegreeProgramServiceTest
     private readonly InMemoryDegreeProgramRepository _programRepo = new();
     private readonly MemoryStudentRepository _studentRepo = new();
 
-    private MemoryDegreeProgramService BuildService()
+    private DegreeProgramService BuildService()
     {
         var uow = new MemoryUniversityUnitOfWork(_studentRepo, new MemoryLecturerRepository(),
             new InMemoryGradeRepository(), new InMemoryCourseRepository(), _programRepo);
-        return new MemoryDegreeProgramService(uow);
+        return new DegreeProgramService(uow);
     }
 
     [Fact]
