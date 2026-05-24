@@ -3,6 +3,7 @@ using System;
 using Infrastructure.EntityFramework.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(UniversityOfficeDbContext))]
-    partial class UniversityOfficeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260602194827_AddRefreshTokens")]
+    partial class AddRefreshTokens
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.0");
@@ -21,8 +24,7 @@ namespace Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .UseCollation("NOCASE");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("INTEGER");
@@ -47,12 +49,10 @@ namespace Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .UseCollation("NOCASE");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid?>("AcademicYearId")
-                        .HasColumnType("TEXT")
-                        .UseCollation("NOCASE");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -64,15 +64,13 @@ namespace Infrastructure.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<Guid?>("DegreeProgramId")
-                        .HasColumnType("TEXT")
-                        .UseCollation("NOCASE");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("EctsCredits")
                         .HasColumnType("INTEGER");
 
                     b.Property<Guid?>("InstructorId")
-                        .HasColumnType("TEXT")
-                        .UseCollation("NOCASE");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -98,8 +96,7 @@ namespace Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .UseCollation("NOCASE");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -135,16 +132,13 @@ namespace Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .UseCollation("NOCASE");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid?>("AcademicYearId")
-                        .HasColumnType("TEXT")
-                        .UseCollation("NOCASE");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("CourseId")
-                        .HasColumnType("TEXT")
-                        .UseCollation("NOCASE");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("TEXT");
@@ -158,12 +152,10 @@ namespace Infrastructure.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<Guid?>("InstructorId")
-                        .HasColumnType("TEXT")
-                        .UseCollation("NOCASE");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("StudentId")
-                        .HasColumnType("TEXT")
-                        .UseCollation("NOCASE");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -182,8 +174,7 @@ namespace Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .UseCollation("NOCASE");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -251,7 +242,7 @@ namespace Infrastructure.Migrations
                         new
                         {
                             Id = "11111111-1111-1111-1111-111111111111",
-                            ConcurrencyStamp = "d69b146d-d3f3-4b8f-938a-1ec3de77c8db",
+                            ConcurrencyStamp = "60e40697-ddcc-44c9-b745-25b305aec361",
                             Description = "Administrator systemu",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
@@ -259,7 +250,7 @@ namespace Infrastructure.Migrations
                         new
                         {
                             Id = "22222222-2222-2222-2222-222222222222",
-                            ConcurrencyStamp = "1711becb-87bc-4414-ae8f-d1ece2034f66",
+                            ConcurrencyStamp = "afb1b0e7-8fa5-4d53-889d-d60884415298",
                             Description = "Pracownik dziekanatu",
                             Name = "DeanOfficeWorker",
                             NormalizedName = "DEANOFFICEWORKER"
@@ -267,7 +258,7 @@ namespace Infrastructure.Migrations
                         new
                         {
                             Id = "33333333-3333-3333-3333-333333333333",
-                            ConcurrencyStamp = "a20b84f9-99b2-4836-be5f-d71c3702d894",
+                            ConcurrencyStamp = "26b3c3d0-4111-451d-9913-d86f28fb29e2",
                             Description = "Kanclerz",
                             Name = "Chancellor",
                             NormalizedName = "CHANCELLOR"
@@ -275,7 +266,7 @@ namespace Infrastructure.Migrations
                         new
                         {
                             Id = "44444444-4444-4444-4444-444444444444",
-                            ConcurrencyStamp = "f8664178-8972-41a3-af50-cc27abf795d1",
+                            ConcurrencyStamp = "e890acd4-853b-441c-beb9-be87202f9c27",
                             Description = "Prowadzacy zajecia",
                             Name = "Lecturer",
                             NormalizedName = "LECTURER"
@@ -283,7 +274,7 @@ namespace Infrastructure.Migrations
                         new
                         {
                             Id = "55555555-5555-5555-5555-555555555555",
-                            ConcurrencyStamp = "8fde0d69-992d-429a-b49d-4465081fd805",
+                            ConcurrencyStamp = "0c932e1b-0d4b-4773-9271-b51788eea34e",
                             Description = "Student",
                             Name = "Student",
                             NormalizedName = "STUDENT"
@@ -439,8 +430,7 @@ namespace Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .UseCollation("NOCASE");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
@@ -548,18 +538,6 @@ namespace Infrastructure.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
-                            RoleId = "11111111-1111-1111-1111-111111111111"
-                        },
-                        new
-                        {
-                            UserId = "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb",
-                            RoleId = "22222222-2222-2222-2222-222222222222"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -603,16 +581,13 @@ namespace Infrastructure.Migrations
                     b.HasBaseType("Domain.Entities.Person");
 
                     b.Property<Guid?>("CourseId")
-                        .HasColumnType("TEXT")
-                        .UseCollation("NOCASE");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid?>("DegreeProgramId")
-                        .HasColumnType("TEXT")
-                        .UseCollation("NOCASE");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid?>("EnrollmentYearId")
-                        .HasColumnType("TEXT")
-                        .UseCollation("NOCASE");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Status")
                         .IsRequired()

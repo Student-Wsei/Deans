@@ -1,4 +1,6 @@
 using System;
+using AppCore.Authorization;
+using AppCore.Services;
 using Application.Services;
 using Domain;
 using Infrastructure.EntityFramework.Context;
@@ -6,10 +8,14 @@ using Infrastructure.EntityFramework.Entities;
 using Infrastructure.EntityFramework.Repositories;
 using Infrastructure.EntityFramework.UnitOfWork;
 using Infrastructure.Repositories;
+using Infrastructure.Security;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure.EntityFramework;
 
@@ -29,7 +35,9 @@ public static class UniversityOfficeInfrastructureModule
 
         services.AddDbContext<UniversityOfficeDbContext>(options =>
             options.UseSqlite(
-                configuration.GetConnectionString("UniversityDb")));
+                configuration.GetConnectionString("UniversityDb"))
+            .ConfigureWarnings(w =>
+                w.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning)));
 
         services.AddIdentity<AppUser, AppRole>(options =>
             {
@@ -46,6 +54,8 @@ public static class UniversityOfficeInfrastructureModule
 
         services.AddScoped<IStudentService, StudentService>();
         services.AddScoped<IDegreeProgramService, DegreeProgramService>();
+        services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IDataSeeder, UniversityDbSeeder>();
 
         return services;
     }
@@ -63,6 +73,54 @@ public static class UniversityOfficeInfrastructureModule
 
         services.AddSingleton<IStudentService, StudentService>();
         services.AddSingleton<IDegreeProgramService, DegreeProgramService>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddJwt(this IServiceCollection services, JwtSettings jwtOptions)
+    {
+        services
+            .AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtOptions.Issuer,
+                    ValidAudience = jwtOptions.Audience,
+                    IssuerSigningKey = jwtOptions.GetSymmetricKey(),
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
+
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy(AppPolicies.AdminOnly.ToString(), policy =>
+                policy.RequireRole(UserRole.Administrator.ToString()));
+
+            options.AddPolicy(AppPolicies.ActiveUser.ToString(), policy =>
+                policy
+                    .RequireAuthenticatedUser()
+                    .RequireClaim("status", SystemUserStatus.Active.ToString()));
+
+            options.AddPolicy(AppPolicies.SalesDepartment.ToString(), policy =>
+                policy.RequireClaim("department", "Sales"));
+
+            options.DefaultPolicy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .Build();
+
+            options.FallbackPolicy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .Build();
+        });
 
         return services;
     }

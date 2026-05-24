@@ -2,6 +2,7 @@ using AppCore.Services;
 using Domain.Entities;
 using Domain.Enums;
 using Infrastructure.EntityFramework.Entities;
+using Infrastructure.Security;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,10 +12,12 @@ public class UniversityOfficeDbContext : IdentityDbContext<AppUser, AppRole, str
 {
     public DbSet<Student> Students { get; set; }
     public DbSet<Lecturer> Lecturers { get; set; }
+    public DbSet<Person> Person { get; set; }
     public DbSet<Course> Courses { get; set; }
     public DbSet<Grade> Grades { get; set; }
     public DbSet<DegreeProgram> DegreePrograms { get; set; }
     public DbSet<AcademicYear> AcademicYears { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
 
     public UniversityOfficeDbContext() { }
 
@@ -185,6 +188,19 @@ public class UniversityOfficeDbContext : IdentityDbContext<AppUser, AppRole, str
                 Department = "Dziekanat",
                 Status = SystemUserStatus.Active,
                 CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Unspecified)
+            }
+        );
+
+        builder.Entity<Microsoft.AspNetCore.Identity.IdentityUserRole<string>>().HasData(
+            new Microsoft.AspNetCore.Identity.IdentityUserRole<string>
+            {
+                UserId = adminUserId,
+                RoleId = adminRoleId
+            },
+            new Microsoft.AspNetCore.Identity.IdentityUserRole<string>
+            {
+                UserId = deanUserId,
+                RoleId = deanRoleId
             }
         );
     }

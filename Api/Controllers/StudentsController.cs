@@ -1,7 +1,9 @@
 using System;
 using System.Threading.Tasks;
+using AppCore.Authorization;
 using AppCore.Dto;
 using Application.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
@@ -11,6 +13,7 @@ namespace Api.Controllers;
 public class StudentsController(IStudentService service) : ControllerBase
 {
     [HttpGet]
+    [Authorize(Policy = nameof(AppPolicies.AdminOnly))]
     public async Task<IActionResult> GetAllStudents([FromQuery] int page = 1, [FromQuery] int size = 10)
     {
         return Ok(await service.FindAllStudentsPaged(page, size));
