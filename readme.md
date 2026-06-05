@@ -1,9 +1,12 @@
 Autor: Paweł Polakiewicz (15590)
 
+URL: https://github.com/Student-Wsei/Deans
+
 Uruchomienie projektu:
-dotnet tool install --global dotnet-ef --version 10.0.0
-dotnet ef database update
-dotnet run --project Api
+
+- dotnet tool install --global dotnet-ef --version 10.0.0
+- dotnet ef database update
+- dotnet run --project Api
 
 Logowanie:
 Admin: admin@wsei.edu.pl | Admin123!
